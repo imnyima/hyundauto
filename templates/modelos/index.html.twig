@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ModelosController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code>/var/www/html/hyundauto/src/Controller/ModelosController.php</code></li>
+        <li>Your template at <code>/var/www/html/hyundauto/templates/modelos/index.html.twig</code></li>
+    </ul>
+
+<!-- MEDIANTE RESPONSE -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tipo</th>
+                <th>Modelo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for modelo in modelos %}
+            <tr>
+                <td> {{modelo.id}}</td>
+                <td> {{modelo.nombre_tipo }}</td>
+                <td> {{modelo.nombre_modelo }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
