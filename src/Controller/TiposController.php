@@ -72,6 +72,14 @@ class TiposController extends AbstractController
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /*
+    * Para definir un formulario:
+    * 1) Configurar config/packages/twig.yaml para añadir Bootstrap
+    * 2) Crear el formulario en el Controlador
+    * 3) Recoger los datos del formulario
+    * 4) Modificar la Base de Datos
+    * 5) Agregar el formulario como Widget al Twig asociado al controlador
+    */
     // FORMULARIO
     #[Route('/insertar', name: 'insertarTipo')]
     public function insertarTipo(EntityManagerInterface $gestorEntidades, Request $solicitud): Response
@@ -85,6 +93,17 @@ class TiposController extends AbstractController
             ->add('nombre_tipo', TextType::class, ['attr' => ['class' => 'form-control']])
             ->add('guardar', SubmitType::class, ["label" => "Insertar tipo", 'attr' => ['class' => 'btn btn-primary']])
             ->getForm();
+
+        // Recogemos los datos del formulario
+        $formulario->handleRequest($solicitud);
+
+        // Si el formulario se ha enviado y es válido:
+        if ($formulario->isSubmitted() && $formulario->isValid()) {
+            $gestorEntidades->persist($tipo);
+            $gestorEntidades->flush();
+            return $this->redirectToRoute("app_tipos_consultar");
+
+        }
 
         return $this->render('tipos/index.html.twig', [
             'controller_name' => 'TiposController',
