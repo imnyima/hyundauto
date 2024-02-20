@@ -5,8 +5,26 @@ namespace App\Controller;
 use App\Entity\Tipos;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+
+/*
+* Pasos para restaurar el proyecto:
+* 1) php bin/console doctrine:database:create
+* 2) php bin/console make:migration
+* 3) php bin/console doctrine:migrations:migrate
+* 4) http://localhost:8000/tipos/insertar/Eléctrico
+* 5) http://localhost:8000/tipos/insertar/Híbrido
+* 6) http://localhost:8000/modelos/insertar
+* 7) http://localhost:8000/modelos/consultar
+* 8) http://localhost:8000/modelos/consultarJSON
+*/
 
 // AÑADIMOS "_" AL FINAL DE "APP_TIPOS"
 #[Route('/tipos', name: 'app_tipos_')]
@@ -28,8 +46,49 @@ class TiposController extends AbstractController
         $gestorEntidades->persist($tipo);
         $gestorEntidades->flush();
 
-
-
         return new Response("<h1>Tipo insertado con ID = " . $tipo->getId() . "</h1>");
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // CONSULTAR MEDIANTE JSON
+    #[Route('/consultar', name: 'consultar')]
+    public function consultar(EntityManagerInterface $gestorEntidades): JsonResponse
+    {
+        // ENDPOINT: http://127.0.0.1:8000/tipos/consultar
+
+        $tipos = $gestorEntidades->getRepository(Tipos::class)->findAll();
+
+            $json = array();
+            foreach ($tipos as $tipo) {
+                $json[] = array(
+                    "id" => $tipo->getId(),
+                    "nombre_tipo" => $tipo->getNombreTipo(),
+                );
+            }
+
+            return new JsonResponse($json);
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // FORMULARIO
+    #[Route('/insertar', name: 'insertarTipo')]
+    public function insertarTipo(EntityManagerInterface $gestorEntidades, Request $solicitud): Response
+    {
+        // ENDPOINT: http://127.0.0.1:8000/tipos/insertar
+
+        $tipo = new Tipos();
+
+        // Creamos el formulario. CAMPO POR CAMPO
+        $formulario = $this->createFormBuilder($tipo)
+            ->add('nombre_tipo', TextType::class, ['attr' => ['class' => 'form-control']])
+            ->add('guardar', SubmitType::class, ["label" => "Insertar tipo", 'attr' => ['class' => 'btn btn-primary']])
+            ->getForm();
+
+        return $this->render('tipos/index.html.twig', [
+            'controller_name' => 'TiposController',
+            'miForm' => $formulario->createView(),
+        ]); 
     }
 }

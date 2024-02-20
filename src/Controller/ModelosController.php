@@ -99,4 +99,49 @@ class ModelosController extends AbstractController
 
         return new JsonResponse($json);
     }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // ACTUALIZACIÓN CON REDIRECCIÓN
+    #[Route('/actualizar/{tipo}/{modelo}/{id}', name: 'actualizar')]
+    public function actualizar(EntityManagerInterface $gestorEntidades, int $tipo, String $modelo, int $id): Response
+    {
+        // ENDPOINT: http://127.0.0.1:8000/modelos/actualizar/1/Tucson 1.6 TGDI HEV/2
+
+        $repoModelo = $gestorEntidades->getRepository(Modelos::class);
+        $modeloCambiado = $repoModelo->find($id);
+
+        // SETEAR NOMBRE MODELO
+        $modeloCambiado->setNombreModelo($modelo);
+
+        $repoTipo = $gestorEntidades->getRepository(Tipos::class);
+        $tipoModificado = $repoTipo->find($tipo);
+
+        // SETEAR TIPO MODELO
+        $modeloCambiado->setIdTipo($tipoModificado);
+
+        $gestorEntidades->flush();
+
+        return $this->redirectToRoute("app_modelos_consultar");
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // BORRADO DE MODELO CON SALIDA JSON
+    #[Route('/eliminar/{id}', name: 'eliminar')]
+    public function eliminar(EntityManagerInterface $gestorEntidades, int $id): Response
+    {
+        // ENDPOINT: http://127.0.0.1:8000/modelos/eliminar/2
+
+        // SACAMOS REPOSITORIO:
+        $repoModelo = $gestorEntidades->getRepository(Modelos::class);
+
+        // SACAMOS MODELO A BORRAR:
+        $modeloBorrado = $repoModelo->find($id);
+        $gestorEntidades->remove($modeloBorrado);
+
+        $gestorEntidades->flush();
+
+        return $this->redirectToRoute("app_modelos_consultar_json");
+    }
 }
