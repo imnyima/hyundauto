@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CochesRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -76,11 +77,22 @@ class Coches
 
         return $this;
     }
-
+    
     public function getFecha(): ?\DateTimeInterface
     {
         return $this->fecha;
     }
+    
+    // CREAMOS NUEVO GETFECHA PARA LA FECHA (UNA FORMA DE HACERLO):
+    // SI USAMOS LO SIGUIENTE, COMENTAMOS LAS LÍNEAS DE ARRIBA DE GETFECHA
+    /*public function getFecha(): ?string
+    {
+        $fecha = new DateTime();
+        $fechaFormateada = $this->fecha->format("Y-m-d");
+
+        return $fechaFormateada;
+    }
+    */
 
     public function setFecha(\DateTimeInterface $fecha): static
     {

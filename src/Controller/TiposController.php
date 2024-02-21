@@ -99,9 +99,10 @@ class TiposController extends AbstractController
 
         // Si el formulario se ha enviado y es válido:
         if ($formulario->isSubmitted() && $formulario->isValid()) {
+            $tipo = $formulario->getData();
             $gestorEntidades->persist($tipo);
             $gestorEntidades->flush();
-            return $this->redirectToRoute("app_tipos_consultar");
+            return $this->redirectToRoute("app_modelos_consultar");
 
         }
 
