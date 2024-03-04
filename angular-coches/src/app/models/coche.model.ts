@@ -1,17 +1,27 @@
+// [App-Angular-Coches]
+// 2. Definir la capa del modelo (mapea campos -> componente)
 export class Coche {
-    matricula: string;
-    id_modelo: number;
-    precio: number;
-    estado: boolean;
-    kms: number;
-    fecha: Date;
+    matricula: string;      // Primary Key
+    caracteristicas: Caracteristicas
+    fecha: Date
+    modelo: string
 
-    constructor(matricula: string, id_modelo: number, precio: number, estado: boolean, kms: number, fecha: Date){
+    constructor(
+        matricula:string, 
+        caracteristicas: Caracteristicas, 
+        fecha:Date, 
+        modelo: string){
         this.matricula = matricula;
-        this.id_modelo = id_modelo;
-        this.precio = precio;
-        this.estado = estado;
-        this.kms = kms;
-        this.fecha = fecha;
+        this.caracteristicas = caracteristicas
+        this.fecha = fecha
+        this.modelo = modelo;
     }
+
+    
+}
+
+export interface Caracteristicas {
+    precio:number
+    estado:boolean
+    kms:number
 }

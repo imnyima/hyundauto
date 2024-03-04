@@ -1,0 +1,26 @@
+<!--
+    // [App-Angular-Coches]
+    // 5. Defino la vista del componente
+-->
+
+<section class="p-3">
+    <h2>Lista de coches</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>matricula</th>
+            <th>precio</th>
+            <th>estado</th>
+            <th>kms</th>
+            <th>fecha</th>
+            <th>modelo</th>
+        </tr>
+        <tr *ngFor="let coche of coches">
+            <td>{{coche.matricula}}</td>
+            <td>{{coche.caracteristicas.precio}}</td>
+            <td>{{coche.caracteristicas.estado? "Activo" : "Inactivo"}}</td>
+            <td>{{coche.caracteristicas.kms}}</td>
+            <td>{{coche.fecha}}</td>
+            <td>{{coche.modelo}}</td>
+        </tr>
+    </table>
+</section>

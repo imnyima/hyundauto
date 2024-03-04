@@ -1,0 +1,8 @@
+/*
+    // [App-Angular-Coches]
+    // 6. (Opcional) Añadimos Boostrap
+    // instalamos paquete (npm install --save bootstrap
+    // Añadimos el soporte de boostrap en style en angular.json
+    // E importamos el css de boostrap aquí
+*/
+@import '~bootstrap/dist/css/bootstrap.min.css';
